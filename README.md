@@ -12,6 +12,7 @@ photos (optional) <br />
 Description of the trip as well as some thoughts (required) <br />
 Favorite moments (optional) <br />
 complaints (optional) <br />
+Suggestions(optional) <br />
  <br />
 Entry viewing details (what you can do when viewing): <br />
 add tags possibly <br />

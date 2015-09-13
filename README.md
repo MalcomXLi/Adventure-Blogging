@@ -1,9 +1,9 @@
 # travelblog
-
-This is a website that allows users to create personal travel entries. These travel entries can include a variety of information about their travel as well as tags related to the vacation. Other users can search up travel entries by tags or categories and rate the travel entry.  \n
-\n
+ <br /> <br />
+This is a website that allows users to create personal travel entries. These travel entries can include a variety of information about their travel as well as tags related to the vacation. Other users can search up travel entries by tags or categories and rate the travel entry.  <br />
+ <br />
 Entry details: 
-Trip name (could be anything they want) (required) \n
+Trip name (could be anything they want) (required)  <br />
 Days of travel (required)\n
 Destination (required)\n
 tags, both preset and custom tags (required)\n

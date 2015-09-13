@@ -13,15 +13,18 @@ Description of the trip as well as some thoughts (required) <br />
 Favorite moments (optional) <br />
 complaints (optional) <br />
 Suggestions(optional) <br />
+cool local souvenirs <br />
  <br />
 Entry viewing details (what you can do when viewing): <br />
 add tags possibly <br />
 rate blog (kinda like upvoting) <br />
+following/unfollowing <br />
  <br />
 Different pages needed: <br />
 Home page <br />
 Login Page <br />
 Registration Page <br />
+User creation page <br />
 Travel Blog skeleton (where the user can write or edit their travel blog) <br />
 travel blog listing page (where the multiple travel blogs are listed) <br />
 

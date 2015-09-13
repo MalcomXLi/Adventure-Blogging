@@ -13,7 +13,7 @@ Description of the trip as well as some thoughts (required) <br />
 Favorite moments (optional) <br />
 complaints (optional) <br />
 Suggestions(optional) <br />
-cool local souvenirs <br />
+cool local souvenirs (optional)<br />
  <br />
 Entry viewing details (what you can do when viewing): <br />
 add tags possibly <br />

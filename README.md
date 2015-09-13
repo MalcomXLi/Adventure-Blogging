@@ -24,10 +24,12 @@ Registration Page <br />
 Travel Blog skeleton (where the user can write or edit their travel blog) <br />
 travel blog listing page (where the multiple travel blogs are listed) <br />
 
- <br /> <br />
+ <br /> 
 Technologies to use: <br />
 WordPress <br />
-Javascript (prolly) <br />
+Javascript (prolly like node or something) <br />
+meteror.js or angular <br />
 HTML/CSS <br />
-MongoDB <br />
+MongoDB or MySQL<br />
+heroku <br/>
 

@@ -4,7 +4,7 @@
   "description": "<br /> <br />\r This is a website that allows users to create personal travel entries. These travel entries can include a variety of information about their travel as well as tags related to the vacation. Other users can search up travel entries by tags or categories and rate the travel entry.  <br />\r  <br />\r Entry details: \r Trip name (could be anything they want) (required)  <br />\r Days of travel (required) <br />\r Destination (required) <br />\r tags, both preset and custom tags (required) <br />\r itinerary (optional) <br />\r photos (optional) <br />\r Description of the trip as well as some thoughts (required) <br />\r Favorite moments (optional) <br />\r complaints (optional) <br />\r Suggestions(optional) <br />\r cool local souvenirs (optional)<br />\r  <br />\r Entry viewing details (what you can do when viewing): <br />\r add tags possibly <br />\r rate blog (kinda like upvoting) <br />\r following/unfollowing <br />\r  <br />\r Different pages needed: <br />\r Home page <br />\r Login Page <br />\r Registration Page <br />\r User creation page <br />\r Travel Blog skeleton (where the user can write or edit their travel blog) <br />\r travel blog listing page (where the multiple travel blogs are listed) <br />",
   "main": "app.js",
   "dependencies": {
-    "express": "4.13.^"
+    "express": "^4.13.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

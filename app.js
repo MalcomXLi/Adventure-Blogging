@@ -10,7 +10,7 @@ app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(__dirname+ '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-var COMMENTS_FILE = __dirname + '\\comments.json';
+var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 
 
 //get the posts from the comments folder, which will be replaced with directory later

@@ -51,6 +51,23 @@ var UserBox = React.createClass({
       }.bind(this)
     });
   },
+  handleUserSubmit: function(login) {
+    var log = this.state.data;
+    var newLogins = log.concat([login]);
+    this.setState({data: newLogins});
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      type: 'POST',
+      data: login,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   getInitialState: function() {
     return {data: []};
   },
@@ -62,6 +79,7 @@ var UserBox = React.createClass({
     return (
       <div className="userBox">
         <h1>Users</h1>
+        <SubmitForm onUserSubmit={this.handleUserSubmit} />
         <UserList data={this.state.data} />
       </div>
     );
@@ -85,6 +103,33 @@ var UserList = React.createClass({
   }
 });
 
+var SubmitForm = React.createClass({
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var userName = this.refs.Login.value.trim();
+    var password = this.refs.Password.value.trim();
+    if (!userName || !password) {
+      return;
+    }
+    this.props.onUserSubmit({Login: userName, Password: password});
+    this.refs.Login.value = '';
+    this.refs.Password.value = '';
+  },
+  render: function() {
+    return (
+      <form className="submitForm" onSubmit={this.handleSubmit}>
+        <div id='Login'>
+          <h3 id = "login">Login: </h3>
+          <h4>User Name:</h4>
+          <input type="text" placeholder="User Name" ref="Login" />
+          <h4>Password:</h4>
+          <input type="text" placeholder="Password" ref="Password" />
+        </div>
+        <input type="submit" value="Post" />
+      </form>
+    );
+  }
+});
 
 ReactDOM.render(
   <UserBox url="/user" pollInterval={2000} />,

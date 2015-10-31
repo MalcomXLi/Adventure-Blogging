@@ -50,7 +50,7 @@ app.get('/user', function(req, res) {
         });
 });
 
-//WRITE
+//Sign up
 app.post('/signup', function(req, res){
     console.log(req.body);
     console.log(db_name);
@@ -79,6 +79,28 @@ app.post('/signup', function(req, res){
     });
 
 });
+
+
+//Login 
+app.post('/user', function(req, res){
+
+    var login = req.body.Login;
+    var password = req.body.Password;
+    console.log(login);
+    console.log(password);
+    var blogSchema = req.blogSchema;
+    var User = mongoose.model(db_name, blogSchema, collection_name);
+    findUsers(collection_name, {"Login": login, "Password": password}, function (err, docs) {
+            if(docs.length > 0){
+                res.status(201).json('Login Successful');
+                console.log("success");
+            }else{
+                res.status(201).json('Login Failed');
+                console.log("failed");
+            }
+        });
+    });
+
 
 //DELETE
 app.post('/api/delete', function(req, res){

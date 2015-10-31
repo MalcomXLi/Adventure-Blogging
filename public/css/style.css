@@ -68,5 +68,6 @@ button {
 }
 
 .sign_up{
-  
+  background-color: pink;
+  display: block;
 }

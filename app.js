@@ -15,9 +15,10 @@ var Schema = mongoose.Schema;
 var blogSchema = new Schema({
   Login:  String,
   Password: String,
-});
+}, { collection: db_name });
 
 var db_name = "travel";
+var collection_name = 'travel';
 //MONGO SET UP END
 
 //Listens for the environment variable PORT, if there is none then use 3000
@@ -26,6 +27,7 @@ app.set('port', (process.env.PORT || 3000));
 //passing database on
 app.use(function(req,res,next){
     req.db = db;
+    req.blogSchema = blogSchema;
     next();
 });
 
@@ -39,22 +41,23 @@ var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 
 //get the posts from the comments folder, which will be replaced with directory later
 //READ
-app.get('/api', function(req, res) {
+app.get('/user', function(req, res) {
     var db = req.db;
     res.setHeader('Cache-Control', 'no-cache');
-    findUsers(db_name, {}, function (err, data) {
-           console.log(data);
+    findUsers(collection_name, {}, function (err, data) {
+           //console.log(data);
            res.json((data));
         });
 });
 
 //WRITE
-app.post('/api', function(req, res){
+app.post('/signup', function(req, res){
     console.log(req.body);
+    console.log(db_name);
      // Set our internal DB variable
     var db = req.db;
     var blogSchema = req.blogSchema;
-    var User = mongoose.model(db_name, blogSchema);
+    var User = mongoose.model(db_name, blogSchema, collection_name);
     // Get our form values. These rely on the "name" attributes
     var newLogin = req.body.Login;
     var newPassword = req.body.Password;
@@ -70,6 +73,7 @@ app.post('/api', function(req, res){
             res.status(500).json({ error: "save failed", err: err});
             return;
         } else {
+            console.log("success");
             res.status(201).json(newUser);
         };
     });

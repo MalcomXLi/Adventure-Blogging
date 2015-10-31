@@ -1,48 +1,13 @@
 
+var UserBox = React.createClass({
 
-var Comment = React.createClass({
-
-  onSubmit: function(event){
-    event.preventDefault();
-    var author = this.props.author;
-    var children = this.props.children;
-    var deleteData =({author: author, text: children});
-    $.ajax({
-      url: '/api/delete',
-      dataType: 'json',
-      type: 'POST',
-      data: deleteData,
-      success: function(data) {
-        console.log("success!");
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
-
-  render: function() {
-    return (
-      <div className="comment">
-        <form onSubmit={this.onSubmit} className="MyForm">
-          <button type="submit">Submit</button>
-        </form>
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
-        {this.props.children} 
-      </div>
-    );
-  }
-
-});
-
-var CommentBox = React.createClass({
-  loadCommentsFromServer: function() {
+  handleUserSubmit: function(login) {
+    var log = this.state.data;
     $.ajax({
       url: this.props.url,
       dataType: 'json',
-      cache: false,
+      type: 'POST',
+      data: login,
       success: function(data) {
         this.setState({data: data});
       }.bind(this),
@@ -50,83 +15,50 @@ var CommentBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-  },
-  handleCommentSubmit: function(comment) {
-    var comments = this.state.data;
-    var newComments = comments.concat([comment]);
-    this.setState({data: newComments});
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: comment,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    //go back to home
+    window.location = '/';
   },
   getInitialState: function() {
     return {data: []};
   },
-  componentDidMount: function() {
-    this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
-  },
   render: function() {
     return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+      <div className="signupBox">
+        <SubmitForm onUserSubmit={this.handleUserSubmit} />
       </div>
     );
   }
 });
 
-var CommentList = React.createClass({
-  render: function() {
-    var commentNodes = this.props.data.map(function(comment, index) {
-      return (
-        <Comment author={comment.author} key={index}>
-          {comment.text}
-        </Comment>
-      );
-    });
-    return (
-      <div className="commentList">
-        {commentNodes}
-      </div>
-    );
-  }
-});
 
-var CommentForm = React.createClass({
+var SubmitForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.value.trim();
-    var text = this.refs.text.value.trim();
-    if (!text || !author) {
+    var userName = this.refs.Login.value.trim();
+    var password = this.refs.Password.value.trim();
+    if (!userName || !password) {
       return;
     }
-    this.props.onCommentSubmit({author: author, text: text});
-    this.refs.author.value = '';
-    this.refs.text.value = '';
+    this.props.onUserSubmit({Login: userName, Password: password});
+    this.refs.Login.value = '';
+    this.refs.Password.value = '';
   },
   render: function() {
     return (
-      <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Your name" ref="author" />
-        <input type="text" placeholder="Say something..." ref="text" />
-        <input type="submit" value="Post" />
+      <form className="submitForm" onSubmit={this.handleSubmit}>
+        <div id='Login'>
+          <h4>User Name:</h4>
+          <input type="text" placeholder="User Name" ref="Login" />
+          <h4>Password:</h4>
+          <input type="text" placeholder="Password" ref="Password" />
+        </div>
+        <input type="submit" value="Post" href="/"/>
       </form>
     );
   }
 });
 
 ReactDOM.render(
-  <CommentBox url="/api" pollInterval={2000} />,
-  document.getElementById('content')
+  <UserBox url="/signup" />,
+  document.getElementById('signup')
 );

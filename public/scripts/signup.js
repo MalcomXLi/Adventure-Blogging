@@ -25,7 +25,7 @@ var Comment = React.createClass({
     return (
       <div className="comment">
         <form onSubmit={this.onSubmit} className="MyForm">
-          <button type="submit">Delete</button>
+          <button type="submit">Submit</button>
         </form>
         <h2 className="commentAuthor">
           {this.props.author}
@@ -88,16 +88,16 @@ var CommentBox = React.createClass({
 
 var CommentList = React.createClass({
   render: function() {
-    var loginNodes = this.props.data.map(function(loginInfo, index) {
+    var commentNodes = this.props.data.map(function(comment, index) {
       return (
-        <Comment author={loginInfo.Login} key={index}>
-          {loginInfo.Password}
+        <Comment author={comment.author} key={index}>
+          {comment.text}
         </Comment>
       );
     });
     return (
       <div className="commentList">
-        {loginNodes}
+        {commentNodes}
       </div>
     );
   }
@@ -127,6 +127,6 @@ var CommentForm = React.createClass({
 });
 
 ReactDOM.render(
-  <CommentBox url="/api" pollInterval={50000} />,
+  <CommentBox url="/api" pollInterval={2000} />,
   document.getElementById('content')
 );

@@ -67,7 +67,11 @@ button {
   background-color: khaki;
 }
 
+biggerTextBox{
+    height:200px;
+    font-size:14pt;
+}
+
 .sign_up{
-  background-color: pink;
-  display: block;
+  
 }

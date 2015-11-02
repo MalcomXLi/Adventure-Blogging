@@ -4,19 +4,6 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var routes = require('./routes/routes');//to get routes
-
-//Session Cookie set up start 
-var cookieParser = require('cookie-parser');
-app.use(cookieParser());
-var session = require('express-session');
-app.use(session({
-  secret: 'malcomandronnieadventureblogging',
-  resave: false,
-  saveUninitialized: true,
-}));
-
-//Session Cooke set up ends
-
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -25,6 +12,17 @@ mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelbl
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
+var entrySchema = new Schema({
+	TripName: String, 
+	Days: String, 
+	Destination: String, 
+	Description: String, 
+	Itinerary: String, 
+	Moments: String, 
+	Complaints: String, 
+	Suggestions: String, 
+	Souvenirs: String}, { collection: db_name });
+
 var blogSchema = new Schema({
   Login:  String,
   Password: String,
@@ -32,6 +30,7 @@ var blogSchema = new Schema({
 
 var db_name = "travel";
 var collection_name = 'travel';
+var collection_name_entry = 'entries';
 //MONGO SET UP END
 
 //Listens for the environment variable PORT, if there is none then use 3000
@@ -41,6 +40,7 @@ app.set('port', (process.env.PORT || 3000));
 app.use(function(req,res,next){
     req.db = db;
     req.blogSchema = blogSchema;
+	req.entrySchema = entrySchema;
     next();
 });
 
@@ -49,11 +49,12 @@ app.use(function(req,res,next){
 app.use('/', express.static(__dirname+ '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
-
+var COMMENTS_FILE = path.join(__dirname, 'comments.json');
+                                                                    
 
 //get the posts from the comments folder, which will be replaced with directory later
 //READ
-app.get('/login', function(req, res) {
+app.get('/user', function(req, res) {
     var db = req.db;
     res.setHeader('Cache-Control', 'no-cache');
     findUsers(collection_name, {}, function (err, data) {
@@ -62,29 +63,7 @@ app.get('/login', function(req, res) {
         });
 });
 
-//Login 
-app.post('/login', function(req, res){
-    var sess = req.session;
-    var login = req.body.Login;
-    var password = req.body.Password;
-    var blogSchema = req.blogSchema;
-    var User = mongoose.model(db_name, blogSchema, collection_name);
-    findUsers(collection_name, {"Login": login, "Password": password}, function (err, docs) {
-            if(docs.length > 0){//valid user!
-                sess.user = login;
-                var timeout = 2*60*1000;//2mins
-                sess.cookie.expires = new Date(Date.now()+timeout);
-                console.log(req.session.user);
-                res.status(201).json({'rememberme' : '1'});
-                console.log("success");
-            }else{
-                res.status(201).json('Login Failed');
-                console.log("failed");
-            }
-        });
-    });
-
-//Sign up
+//WRITE
 app.post('/signup', function(req, res){
     console.log(req.body);
     console.log(db_name);
@@ -113,6 +92,49 @@ app.post('/signup', function(req, res){
     });
 
 });
+//post new entry
+app.post('/postentry', function(req, res){
+    console.log(req.body);
+    console.log(db_name);
+     // Set our internal DB variable
+    var db = req.db;
+    var entrySchema = req.entrySchema;
+    var Post = mongoose.model(db_name, entrySchema, collection_name_entry);
+    // Get our form values. These rely on the "name" attributes
+    var name = req.body.TripName;
+    var days = req.body.daysTravel;
+	var dest = req.body.destination;
+	var descrip = req.body.description;
+	var itin = req.body.itinerary;
+	var moments = req.body.favMoments;
+	var complaints = req.body.complaints;
+	var suggestions = req.body.suggestions;
+	var souvenirs = req.body.souvenirs;
+    
+    var newPost = new Post({
+        TripName: name, 
+		Days: days, 
+		Destination: dest, 
+		Description: descrip, 
+		Itinerary: itin, 
+		Moments: moments, 
+		Complaints: complaints, 
+		Suggestions: suggestions, 
+		Souvenirs: souvenirs
+    });
+    
+    newPost.save(function(err) {
+    //if (err) throw err;
+        if (err !== null) {
+            res.status(500).json({ error: "save failed", err: err});
+            return;
+        } else {
+            console.log("success");
+            res.status(201).json(newPost);
+        };
+    });
+
+});
 
 //DELETE
 app.post('/api/delete', function(req, res){
@@ -124,7 +146,7 @@ var server = app.listen(app.get("port"), function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s', port);
+    console.log('Example app listening at http://%s:%s', COMMENTS_FILE, port);
 });
 
 function findUsers (collec, query, callback) {

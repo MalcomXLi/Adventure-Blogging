@@ -1,5 +1,3 @@
-
-
 var User = React.createClass({
 
   onSubmit: function(event){
@@ -68,6 +66,23 @@ var UserBox = React.createClass({
       }.bind(this)
     });
   },
+  handleUserPost: function(post) {
+    var log = this.state.data;
+    var newPost = log.concat([post]);
+    this.setState({data: newPost});
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      type: 'POST',
+      data: post,
+      success: function(data) {
+        console.log(data);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   getInitialState: function() {
     return {data: []};
   },
@@ -125,7 +140,7 @@ var SubmitForm = React.createClass({
           <h4>Password:</h4>
           <input type="text" placeholder="Password" ref="Password" />
         </div>
-        <input type="submit" value="Post" />
+        <input type="submit" value="Login" />
       </form>
     );
   }

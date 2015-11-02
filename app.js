@@ -4,11 +4,24 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var routes = require('./routes/routes');//to get routes
+
+//Session Cookie set up start 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+var session = require('express-session');
+app.use(session({
+  secret: 'malcomandronnieadventureblogging',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+//Session Cooke set up ends
+
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
-mongoose.connect('mongodb://localhost:27017/travel');
+mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
+//mongoose.connect('mongodb://localhost:27017/travel');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
@@ -36,12 +49,11 @@ app.use(function(req,res,next){
 app.use('/', express.static(__dirname+ '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
-var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 
 
 //get the posts from the comments folder, which will be replaced with directory later
 //READ
-app.get('/user', function(req, res) {
+app.get('/login', function(req, res) {
     var db = req.db;
     res.setHeader('Cache-Control', 'no-cache');
     findUsers(collection_name, {}, function (err, data) {
@@ -49,6 +61,28 @@ app.get('/user', function(req, res) {
            res.json((data));
         });
 });
+
+//Login 
+app.post('/login', function(req, res){
+    var sess = req.session;
+    var login = req.body.Login;
+    var password = req.body.Password;
+    var blogSchema = req.blogSchema;
+    var User = mongoose.model(db_name, blogSchema, collection_name);
+    findUsers(collection_name, {"Login": login, "Password": password}, function (err, docs) {
+            if(docs.length > 0){//valid user!
+                sess.user = login;
+                var timeout = 2*60*1000;//2mins
+                sess.cookie.expires = new Date(Date.now()+timeout);
+                console.log(req.session.user);
+                res.status(201).json({'rememberme' : '1'});
+                console.log("success");
+            }else{
+                res.status(201).json('Login Failed');
+                console.log("failed");
+            }
+        });
+    });
 
 //Sign up
 app.post('/signup', function(req, res){
@@ -80,28 +114,6 @@ app.post('/signup', function(req, res){
 
 });
 
-
-//Login 
-app.post('/user', function(req, res){
-
-    var login = req.body.Login;
-    var password = req.body.Password;
-    console.log(login);
-    console.log(password);
-    var blogSchema = req.blogSchema;
-    var User = mongoose.model(db_name, blogSchema, collection_name);
-    findUsers(collection_name, {"Login": login, "Password": password}, function (err, docs) {
-            if(docs.length > 0){
-                res.status(201).json('Login Successful');
-                console.log("success");
-            }else{
-                res.status(201).json('Login Failed');
-                console.log("failed");
-            }
-        });
-    });
-
-
 //DELETE
 app.post('/api/delete', function(req, res){
     console.log(req.body ['author']);
@@ -112,7 +124,7 @@ var server = app.listen(app.get("port"), function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', COMMENTS_FILE, port);
+    console.log('Example app listening at http://%s', port);
 });
 
 function findUsers (collec, query, callback) {

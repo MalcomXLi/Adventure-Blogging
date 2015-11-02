@@ -4,9 +4,9 @@ var User = React.createClass({
 
   onSubmit: function(event){
     event.preventDefault();
-    var author = this.props.author;
-    var children = this.props.children;
-    var deleteData =({author: author, text: children});
+    var user = this.props.user;
+    var password = this.props.children;
+    var deleteData =({user: user, password: password});
     $.ajax({
       url: '/api/delete',
       dataType: 'json',
@@ -61,7 +61,7 @@ var UserBox = React.createClass({
       type: 'POST',
       data: login,
       success: function(data) {
-        this.setState({data: data});
+        console.log(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -132,6 +132,6 @@ var SubmitForm = React.createClass({
 });
 
 ReactDOM.render(
-  <UserBox url="/user" pollInterval={2000} />,
+  <UserBox url="/login" pollInterval={2000} />,
   document.getElementById('content')
 );

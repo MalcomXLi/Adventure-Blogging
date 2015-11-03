@@ -1,3 +1,6 @@
+
+var loggedIn = false;
+
 var User = React.createClass({
 
   onSubmit: function(event){
@@ -42,7 +45,12 @@ var UserBox = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        if (loggedIn){
+          this.setState({data: data});
+        }
+        else{
+          this.setState({data: ""});
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -50,15 +58,16 @@ var UserBox = React.createClass({
     });
   },
   handleUserSubmit: function(login) {
-    var log = this.state.data;
-    var newLogins = log.concat([login]);
-    this.setState({data: newLogins});
+    // var log = this.state.data;
+    // var newLogins = log.concat([login]);
+    // this.setState({data: newLogins}); //For more responsiveness
     $.ajax({
       url: this.props.url,
       dataType: 'json',
       type: 'POST',
       data: login,
       success: function(data) {
+        loggedIn = true;
         console.log(data);
       }.bind(this),
       error: function(xhr, status, err) {

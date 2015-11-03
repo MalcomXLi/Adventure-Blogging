@@ -7,8 +7,8 @@ var routes = require('./routes/routes');//to get routes
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
-//mongoose.connect('mongodb://localhost:27017/travel');
+//mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
+mongoose.connect('mongodb://localhost:27017/travel');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 

@@ -34,9 +34,10 @@ var UserBox = React.createClass({
 
 var SubmitForm = React.createClass({
   handleSubmit: function(e) {
-	  console.log("???");
+	//this.refs.form.submit();
+	console.log("???");
     e.preventDefault();
-    var name = this.refs.TipName.value.trim();
+    var name = this.refs.TripName.value.trim();
     var days = this.refs.daysTravel.value.trim();
 	var dest = this.refs.destination.value.trim();
 	var descrip = this.refs.description.value.trim();
@@ -45,8 +46,9 @@ var SubmitForm = React.createClass({
 	var complaints = this.refs.complaints.value.trim();
 	var suggestions = this.refs.suggestions.value.trim();
 	var souvenirs = this.refs.souvenirs.value.trim();
+	console.log("got here for some reason")
     if (!name || !days || !dest || !descrip) {
-		console.log('in for some reason');
+		console.log("in for some reason");
       return;
     }
 	console.log("passed it");
@@ -63,7 +65,7 @@ var SubmitForm = React.createClass({
   },
   render: function() {
     return (
-      <form className="submitForm" onSubmit={this.handleSubmit}>
+      <form className="submitForm" onSubmit={this.handleSubmit} ref="form">
         <div id='Entry'>
           <h4>Trip Name:</h4>
           <input type="text" placeholder="Trip Name" ref="TripName" />

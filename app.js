@@ -21,7 +21,7 @@ var entrySchema = new Schema({
 	Moments: String, 
 	Complaints: String, 
 	Suggestions: String, 
-	Souvenirs: String}, { collection: db_name });
+	Souvenirs: String,}, { collection: db_name });
 
 var blogSchema = new Schema({
   Login:  String,
@@ -94,6 +94,7 @@ app.post('/signup', function(req, res){
 });
 //post new entry
 app.post('/postentry', function(req, res){
+	console.log("app js post");
     console.log(req.body);
     console.log(db_name);
      // Set our internal DB variable
@@ -102,17 +103,17 @@ app.post('/postentry', function(req, res){
     var Post = mongoose.model(db_name, entrySchema, collection_name_entry);
     // Get our form values. These rely on the "name" attributes
     var name = req.body.TripName;
-    var days = req.body.daysTravel;
-	var dest = req.body.destination;
-	var descrip = req.body.description;
-	var itin = req.body.itinerary;
-	var moments = req.body.favMoments;
-	var complaints = req.body.complaints;
-	var suggestions = req.body.suggestions;
-	var souvenirs = req.body.souvenirs;
+    var days = req.body.Days;
+	var dest = req.body.Destination;
+	var descrip = req.body.Description;
+	var itin = req.body.Itinerary;
+	var moments = req.body.Moments;
+	var complaints = req.body.Complaints;
+	var suggestions = req.body.Suggestions;
+	var souvenirs = req.body.Souvenirs;
     
     var newPost = new Post({
-        TripName: name, 
+        TripName: name,
 		Days: days, 
 		Destination: dest, 
 		Description: descrip, 
@@ -122,7 +123,8 @@ app.post('/postentry', function(req, res){
 		Suggestions: suggestions, 
 		Souvenirs: souvenirs
     });
-    
+    console.log("here is post");
+	console.log(newPost);
     newPost.save(function(err) {
     //if (err) throw err;
         if (err !== null) {

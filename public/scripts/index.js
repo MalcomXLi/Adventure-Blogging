@@ -75,23 +75,6 @@ var UserBox = React.createClass({
       }.bind(this)
     });
   },
-  handleUserPost: function(post) {
-    var log = this.state.data;
-    var newPost = log.concat([post]);
-    this.setState({data: newPost});
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        console.log(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
   getInitialState: function() {
     return {data: []};
   },

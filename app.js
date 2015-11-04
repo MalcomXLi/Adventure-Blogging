@@ -34,7 +34,7 @@ var collection_name_entry = 'entries';
 //MONGO SET UP END
 
 //Listens for the environment variable PORT, if there is none then use 3000
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 4000));
 
 //passing database on
 app.use(function(req,res,next){
@@ -49,22 +49,28 @@ app.use(function(req,res,next){
 app.use('/', express.static(__dirname+ '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
-var COMMENTS_FILE = path.join(__dirname, 'comments.json');
-                                                                    
 
-//get the posts from the comments folder, which will be replaced with directory later
-//READ
-app.get('/user', function(req, res) {
-    var db = req.db;
-    res.setHeader('Cache-Control', 'no-cache');
-    findUsers(collection_name, {}, function (err, data) {
-           //console.log(data);
-           res.json((data));
-        });
+//Return data of peoples logins for now
+//Also check if people are logged in with cache if not hide shit 
+app.get('/login', function(req, res) {
+    console.log("sess");
+    sess = req.session;
+    console.log(sess);
+    if(sess.user){
+        var db = req.db;
+        res.setHeader('Cache-Control', 'no-cache');
+        findUsers(collection_name, {}, function (err, data) {
+               //console.log(data);
+               res.json((data));
+            });
+    }
+    else{
+        res.json("fuck u ");
+    }
 });
 
 //WRITE
-app.post('/signup', function(req, res){
+app.post('/login', function(req, res){
     console.log(req.body);
     console.log(db_name);
      // Set our internal DB variable
@@ -92,6 +98,7 @@ app.post('/signup', function(req, res){
     });
 
 });
+
 //post new entry
 app.post('/postentry', function(req, res){
 	console.log("app js post");
@@ -148,7 +155,7 @@ var server = app.listen(app.get("port"), function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', COMMENTS_FILE, port);
+    console.log('Example app listening at http://%s:%s', port);
 });
 
 function findUsers (collec, query, callback) {

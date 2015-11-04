@@ -3,7 +3,7 @@ var UserBox = React.createClass({
 
   handleUserPost: function(post) {
     var log = this.state.data;
-	console.log("alright man");
+	   console.log("alright man");
     $.ajax({
       url: this.props.url,
       dataType: 'json',
@@ -47,6 +47,7 @@ var SubmitForm = React.createClass({
 	var suggestions = this.refs.suggestions.value.trim();
 	var souvenirs = this.refs.souvenirs.value.trim();
 	console.log("got here for some reason")
+
     if (!name || !days || !dest || !descrip) {
 		console.log("in for some reason");
       return;
@@ -55,13 +56,13 @@ var SubmitForm = React.createClass({
     this.props.onUserSubmit({TripName: name, Days: days, Destination: dest, Description: descrip, Itinerary: itin, Moments: moments, Complaints: complaints, Suggestions: suggestions, Souvenirs: souvenirs});
     this.refs.TripName.value = '';
     this.refs.daysTravel.value = '';
-	this.refs.destination.value = '';
-	this.refs.description.value = '';
-	this.refs.itinerary.value = '';
-	this.refs.favMoments.value = '';
-	this.refs.complaints.value = '';
-	this.refs.suggestions.value = '';
-	this.refs.souvenirs.value = '';
+  	this.refs.destination.value = '';
+  	this.refs.description.value = '';
+  	this.refs.itinerary.value = '';
+  	this.refs.favMoments.value = '';
+  	this.refs.complaints.value = '';
+  	this.refs.suggestions.value = '';
+  	this.refs.souvenirs.value = '';
   },
   render: function() {
     return (

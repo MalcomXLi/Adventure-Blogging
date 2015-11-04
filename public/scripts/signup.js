@@ -48,7 +48,25 @@ var SubmitForm = React.createClass({
       <form className="submitForm" onSubmit={this.handleSubmit}>
         <div id='Login'>
           <h4>User Name:</h4>
-          <input type="text" placeholder="User Name" ref="Login" />
+          <input type="text" placeholder="User Name" ref="Log" />
+        </div>
+       <div id='Login'>
+          <h4>Password:</h4>
+          <input type="text" placeholder="Password" ref="Password" />
+        </div>
+        <div id='Login'>
+          <h4>User Name:</h4>
+          <input type="text" placeholder="User Name" ref="Log" />
+        </div>
+       <div id='Login'>
+          <h4>Password:</h4>
+          <input type="text" placeholder="Password" ref="Password" />
+        </div>
+        <div id='Login'>
+          <h4>User Name:</h4>
+          <input type="text" placeholder="User Name" ref="Log" />
+        </div>
+       <div id='Login'>
           <h4>Password:</h4>
           <input type="text" placeholder="Password" ref="Password" />
         </div>

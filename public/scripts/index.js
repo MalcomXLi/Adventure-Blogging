@@ -1,6 +1,4 @@
 
-var loggedIn = false;
-
 var User = React.createClass({
 
   onSubmit: function(event){
@@ -14,6 +12,7 @@ var User = React.createClass({
       type: 'POST',
       data: deleteData,
       success: function(data) {
+        console.log(data);
         console.log("success!");
       }.bind(this),
       error: function(xhr, status, err) {
@@ -45,12 +44,8 @@ var UserBox = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        if (loggedIn){
-          this.setState({data: data});
-        }
-        else{
-          this.setState({data: ""});
-        }
+        console.log(data);
+        this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -67,7 +62,6 @@ var UserBox = React.createClass({
       type: 'POST',
       data: login,
       success: function(data) {
-        loggedIn = true;
         console.log(data);
       }.bind(this),
       error: function(xhr, status, err) {

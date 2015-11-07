@@ -4,6 +4,21 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var routes = require('./routes/routes');//to get routes
+app.engine('html', require('ejs').renderFile);
+
+//Session Cookie set up start 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+var session = require('express-session');
+app.use(session({
+  secret: 'malcomandronnieadventureblogging',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+//Session Cooke set up ends
+
+
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -23,13 +38,17 @@ var entrySchema = new Schema({
 	Suggestions: String, 
 	Souvenirs: String,}, { collection: db_name });
 
-var blogSchema = new Schema({
+var userSchema = new Schema({
   Login:  String,
   Password: String,
+  Email: String, 
+  Fname: String,
+  Lname: String, 
+  Gender: String,
 }, { collection: db_name });
 
 var db_name = "travel";
-var collection_name = 'travel';
+var collection_name_users = 'users';
 var collection_name_entry = 'entries';
 //MONGO SET UP END
 
@@ -39,7 +58,7 @@ app.set('port', (process.env.PORT || 4000));
 //passing database on
 app.use(function(req,res,next){
     req.db = db;
-    req.blogSchema = blogSchema;
+    req.userSchema = userSchema;
 	req.entrySchema = entrySchema;
     next();
 });
@@ -53,37 +72,67 @@ app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
 //Return data of peoples logins for now
 //Also check if people are logged in with cache if not hide shit 
 app.get('/login', function(req, res) {
-    console.log("sess");
     sess = req.session;
-    console.log(sess);
+    console.log(sess.user);
     if(sess.user){
         var db = req.db;
         res.setHeader('Cache-Control', 'no-cache');
-        findUsers(collection_name, {}, function (err, data) {
-               //console.log(data);
+        getLogins(collection_name_users, {}, function (err, data) {
+               console.log(data);
                res.json((data));
             });
     }
     else{
-        res.json("fuck u ");
+        console.log("lol");
+        res.render('login.html');
     }
 });
 
-//WRITE
+//Login 
 app.post('/login', function(req, res){
+    var sess = req.session;
+    var login = req.body.Login;
+    var password = req.body.Password;
+    var userSchema = req.userSchema;
+    var User = mongoose.model(db_name, userSchema, collection_name_users);
+    findUsers(collection_name_users, {"Login": login, "Password": password}, function (err, docs) {
+            if(docs.length > 0){//valid user!
+                sess.user = login;
+                var timeout = 2*60*1000;//2mins
+                sess.cookie.expires = new Date(Date.now()+timeout);
+                console.log(req.session.user);
+                res.status(201).json({'rememberme' : '1'});
+                console.log("success");
+            }else{
+                res.status(201).json('Login Failed');
+                console.log("failed");
+            }
+        });
+    });
+
+
+//post new entry
+app.post('/signup', function(req, res){
     console.log(req.body);
     console.log(db_name);
      // Set our internal DB variable
     var db = req.db;
-    var blogSchema = req.blogSchema;
-    var User = mongoose.model(db_name, blogSchema, collection_name);
+    var userSchema = req.userSchema;
+    var User = mongoose.model(db_name, userSchema, collection_name_users);
     // Get our form values. These rely on the "name" attributes
     var newLogin = req.body.Login;
     var newPassword = req.body.Password;
-    
+    var newEmail = req.body.Email;
+    var newFname = req.body.fname;
+    var newLname = req.body.lname;
+    var newGender = req.body.Gender;
     var newUser = new User({
         Login: newLogin,
-        Password: newPassword
+        Password: newPassword,
+        Email: newEmail,
+        Fname: newFname,
+        Lname: newLname,
+        Gender: newGender
     });
     
     newUser.save(function(err) {
@@ -155,9 +204,14 @@ var server = app.listen(app.get("port"), function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', port);
+    console.log('Example app listening at http://%s', port);
 });
 
+function getLogins (collec, query, callback) {
+    mongoose.connection.db.collection(collec, function (err, collection) {
+        collection.find(query, {"Login":1}).toArray(callback);
+    });
+}
 function findUsers (collec, query, callback) {
     mongoose.connection.db.collection(collec, function (err, collection) {
         collection.find(query).toArray(callback);

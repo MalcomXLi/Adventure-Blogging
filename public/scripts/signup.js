@@ -51,7 +51,7 @@ var SubmitForm = React.createClass({
       Lname: lname, 
       Gender: gender,
     });
-    this.refs.Login.value = '';
+    this.refs.Log.value = '';
     this.refs.Password.value = '';
     this.refs.Email.value = '';
     this.refs.fname.value = '';
@@ -88,7 +88,7 @@ var SubmitForm = React.createClass({
             <option value="Female" >Female</option>
           </select>
         </div>
-        <input type="submit" value="Post" href="/"/>
+        <input type="submit" value="Post" />
       </form>
     );
   }

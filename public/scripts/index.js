@@ -23,7 +23,7 @@ var User = React.createClass({
 
   render: function() {
     return (
-      <div className="user">
+      <div className="user large-4 columns">
         <form onSubmit={this.onSubmit} className="MyForm">
           <button type="submit">Delete</button>
         </form>
@@ -92,7 +92,7 @@ var UserList = React.createClass({
     var loginNodes = this.props.data.map(function(loginInfo, index) {
       return (
         <User user={loginInfo.Login} key={index}>
-          {loginInfo.Password}
+          First Name : {loginInfo.Fname}
         </User>
       );
     });

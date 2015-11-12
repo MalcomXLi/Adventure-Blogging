@@ -35,10 +35,10 @@ var UserBox = React.createClass({
 var SubmitForm = React.createClass({
   handleSubmit: function(e) {
 	//this.refs.form.submit();
-	console.log("???");
-    e.preventDefault();
-    var name = this.refs.TripName.value.trim();
-    var days = this.refs.daysTravel.value.trim();
+
+  e.preventDefault();
+  var name = this.refs.TripName.value.trim();
+  var days = this.refs.daysTravel.value.trim();
 	var dest = this.refs.destination.value.trim();
 	var descrip = this.refs.description.value.trim();
 	var itin = this.refs.itinerary.value.trim();
@@ -67,27 +67,64 @@ var SubmitForm = React.createClass({
   render: function() {
     return (
       <form className="submitForm" onSubmit={this.handleSubmit} ref="form">
-        <div id='Entry'>
-          <h4>Trip Name:</h4>
-          <input type="text" placeholder="Trip Name" ref="TripName" />
-          <h4>Days of Travel:</h4>
-          <input type="text" placeholder="Days of Travel" ref="daysTravel" />
-		  <h4>Destination:</h4>
-          <input type="text" placeholder="Destination" ref="destination" />
-		  <h4>Description:</h4>
-          <textarea rows={5} cols={40}  type="text" placeholder="Description" ref="description"/>
-		  <h4>Itinerary:</h4>
-          <textarea rows={5} cols={40} type="text" placeholder="Itinerary" ref="itinerary" />
-		  <h4>Favorite Moments:</h4>
-          <textarea rows={5} cols={40} type="text" placeholder="Favorite Moments" ref="favMoments" />
-		  <h4>Complaints:</h4>
-          <textarea rows={5} cols={40} type="text" placeholder="Complaints" ref="complaints" />
-		  <h4>Suggestions:</h4>
-          <textarea rows={5} cols={40} type="text" placeholder="Suggestions" ref="suggestions" />
-		  <h4>Cool Souvenirs:</h4>
-          <textarea rows={5} cols={40} type="text" placeholder="Cool Souvenirs" ref="souvenirs" />
+        <div className='row submitForm'>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Trip Name:</h4>
+                <input type="text" placeholder="Trip Name" ref="TripName" />
+            </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Days of Travel:</h4>
+                <input type="text" placeholder="Days of Travel" ref="daysTravel" />
+      		  </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Destination:</h4>
+                <input type="text" placeholder="Destination" ref="destination" />
+      		  </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Description:</h4>
+                <textarea rows={5} cols={40}  type="text" placeholder="Description" ref="description"/>
+      		  </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Itinerary:</h4>
+                <textarea rows={5} cols={40} type="text" placeholder="Itinerary" ref="itinerary" />
+      		  </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Favorite Moments:</h4>
+                <textarea rows={5} cols={40} type="text" placeholder="Favorite Moments" ref="favMoments" />
+      		  </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Complaints:</h4>
+                <textarea rows={5} cols={40} type="text" placeholder="Complaints" ref="complaints" />
+      		  </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Suggestions:</h4>
+                <textarea rows={5} cols={40} type="text" placeholder="Suggestions" ref="suggestions" />
+      		  </div>
+          </div>
+          <div className = 'row'>
+              <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Cool Souvenirs:</h4>
+                <textarea rows={5} cols={40} type="text" placeholder="Cool Souvenirs" ref="souvenirs" />
+                <input className="small button" type="submit" value="Post" href="/"/>
+              </div>
+            </div>
         </div>
-        <input type="submit" value="Post" href="/"/>
+
       </form>
     );
   }

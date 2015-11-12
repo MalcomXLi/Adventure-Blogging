@@ -61,34 +61,46 @@ var SubmitForm = React.createClass({
   render: function() {
     return (
       <form className="submitForm" onSubmit={this.handleSubmit}>
-        <div id='Login'>
-          <h4>User Name:</h4>
-          <input type="text" placeholder="User Name" ref="Log" />
+        <div className='row'>
+          <div className = "large-6 large-centered small-6 columns">
+            <h4>User Name:</h4>
+            <input type="text" placeholder="User Name" ref="Log" />
+          </div>
         </div>
-       <div id='Login'>
-          <h4>Password:</h4>
-          <input type="text" placeholder="Password" ref="Password" />
+       <div className='row'>
+          <div className = "large-6 large-centered small-6 columns">
+            <h4>Password:</h4>
+            <input type="text" placeholder="Password" ref="Password" />
+          </div>
         </div>
-        <div id='Login'>
-          <h4>Email:</h4>
-          <input type="text" placeholder="Email" ref="Email" />
+        <div className='row'>
+          <div className = "large-6 large-centered small-6 columns">
+            <h4>Email:</h4>
+            <input type="text" placeholder="Email" ref="Email" />
+          </div>
         </div>
-        <div id='Login'>
-          <h4>First Name:</h4>
-          <input type="text" placeholder="First Name" ref="fname" />
+        <div className='row'>
+          <div className = "large-6 large-centered small-6 columns">
+            <h4>First Name:</h4>
+            <input type="text" placeholder="First Name" ref="fname" />
+          </div>
         </div>
-        <div id='Login'>
-          <h4>Last Name:</h4>
-          <input type="text" placeholder="Last Name" ref="lname" />
+        <div className='row'>
+          <div className = "large-6 large-centered small-6 columns">
+            <h4>Last Name:</h4>
+            <input type="text" placeholder="Last Name" ref="lname" />
+          </div>
         </div>
-        <div id='Login'>
-          <h4>Gender:</h4>
-          <select name="Gender" ref="Gender">
-            <option value="Male" >Male</option>
-            <option value="Female" >Female</option>
-          </select>
-        </div>
-        <input type="submit" value="Post" />
+        <div className='row'>
+          <div className = "large-6 large-centered small-6 columns">
+              <h4>Gender:</h4>
+              <select name="Gender" ref="Gender">
+                <option value="Male" >Male</option>
+                <option value="Female" >Female</option>
+              </select>
+              <input className = "button small" type="submit" value="Post" />
+          </div>
+         </div>
       </form>
     );
   }

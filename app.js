@@ -16,7 +16,7 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-var cookie_timeout = 2*60*1000; //time it takes for cookie to die
+var cookie_timeout = 20*60*1000; //time it takes for cookie to die
 
 //Session Cooke set up ends
 
@@ -24,8 +24,8 @@ var cookie_timeout = 2*60*1000; //time it takes for cookie to die
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
-//mongoose.connect('mongodb://localhost:27017/travel');
+//mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
+mongoose.connect('mongodb://localhost:27017/travel');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
@@ -38,20 +38,30 @@ var entrySchema = new Schema({
 	Moments: String, 
 	Complaints: String, 
 	Suggestions: String, 
-	Souvenirs: String,}, { collection: db_name });
+	Souvenirs: String,
+    }, { collection: model_entries }
+);
 
 var userSchema = new Schema({
-  Login:  String,
-  Password: String,
-  Email: String, 
-  Fname: String,
-  Lname: String, 
-  Gender: String,
-}, { collection: db_name });
+    Login:  String,
+    Password: String,
+    Email: String, 
+    Fname: String,
+    Lname: String, 
+    Gender: String,
+    }, { collection: model_user }
+);
 
-var db_name = "travel";
+var model_user = "users";
+var model_entries = "entries";
 var collection_name_users = 'users';
 var collection_name_entry = 'entries';
+
+
+//Initializing Models
+var User = mongoose.model(model_user, userSchema, collection_name_users);
+var Entries = mongoose.model(model_entries, entrySchema, collection_name_entry);
+
 //MONGO SET UP END
 
 //Listens for the environment variable PORT, if there is none then use 3000
@@ -73,17 +83,19 @@ app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
 
 //Return data of peoples logins for now
 //Also check if people are logged in with cache if not hide shit 
-app.get('/login', function(req, res) {
+app.get('/home', function(req, res) {
     sess = req.session;
     if(sess.user){
         var db = req.db;
         res.setHeader('Cache-Control', 'no-cache');
-        getLogins(collection_name_users, {}, function (err, data) {
+        getEntries(collection_name_entry, {}, function (err, data) {
+               console.log(data);
                res.json((data));
             });
     }
     else{
-        res.render('login.html');
+        console.log("failed")
+        //res.render('login.html');
     }
 });
 
@@ -93,7 +105,6 @@ app.post('/login', function(req, res){
     var login = req.body.Login;
     var password = req.body.Password;
     var userSchema = req.userSchema;
-    var User = mongoose.model(db_name, userSchema, collection_name_users);
     findUsers(collection_name_users, {"Login": login, "Password": password}, function (err, docs) {
             if(docs.length > 0){//valid user!
                 sess.user = login;
@@ -109,15 +120,13 @@ app.post('/login', function(req, res){
         });
     });
 
-
-//post new entry
+//signing up
 app.post('/signup', function(req, res){
     console.log(req.body);
     console.log(db_name);
      // Set our internal DB variable
     var db = req.db;
     var userSchema = req.userSchema;
-    var User = mongoose.model(db_name, userSchema, collection_name_users);
     // Get our form values. These rely on the "name" attributes
     var newLogin = req.body.Login;
     var newPassword = req.body.Password;
@@ -150,13 +159,9 @@ app.post('/signup', function(req, res){
 
 //post new entry
 app.post('/postentry', function(req, res){
-	console.log("app js post");
-    console.log(req.body);
-    console.log(db_name);
      // Set our internal DB variable
     var db = req.db;
     var entrySchema = req.entrySchema;
-    var Post = mongoose.model(db_name, entrySchema, collection_name_entry);
     // Get our form values. These rely on the "name" attributes
     var name = req.body.TripName;
     var days = req.body.Days;
@@ -168,7 +173,7 @@ app.post('/postentry', function(req, res){
 	var suggestions = req.body.Suggestions;
 	var souvenirs = req.body.Souvenirs;
     
-    var newPost = new Post({
+    var newPost = new Entries({
         TripName: name,
 		Days: days, 
 		Destination: dest, 
@@ -179,15 +184,13 @@ app.post('/postentry', function(req, res){
 		Suggestions: suggestions, 
 		Souvenirs: souvenirs
     });
-    console.log("here is post");
-	console.log(newPost);
     newPost.save(function(err) {
     //if (err) throw err;
         if (err !== null) {
             res.status(500).json({ error: "save failed", err: err});
             return;
         } else {
-            console.log("success");
+            console.log("success in posting");
             res.status(201).json(newPost);
         };
     });
@@ -212,6 +215,13 @@ function getLogins (collec, query, callback) {
         collection.find(query, {"Login":1, "Fname":1}).toArray(callback);
     });
 }
+
+function getEntries (collec, query, callback){
+    mongoose.connection.db.collection(collec, function (err, collection) {
+        collection.find(query).toArray(callback);
+    });
+}
+
 function findUsers (collec, query, callback) {
     mongoose.connection.db.collection(collec, function (err, collection) {
         collection.find(query).toArray(callback);

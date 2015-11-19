@@ -28,3 +28,8 @@ body {
 .submitForm{
   padding-top: 20px;
 }
+
+.row.full {
+  max-width: 100%; 
+}
+

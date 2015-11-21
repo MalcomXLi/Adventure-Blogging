@@ -33,11 +33,9 @@ var UserBox = React.createClass({
 
 
 var SubmitForm = React.createClass({
-  handleSubmitSecond: function(e){
-	e.preventDefault();
-  },
   
   handleChange: function(e){
+    e.preventDefault();
 		var self = this;
 		var file = e.target.files[0];
 		
@@ -89,7 +87,7 @@ var SubmitForm = React.createClass({
   render: function() {
     return (
 	<section>
-      <form className="submitForm" onSubmit={this.handleSubmit} ref="form">
+      <form className="submitForm" encType="multipart-formdata" onSubmit={this.handleSubmit} ref="form">
         <div className='row submitForm'>
           <div className = 'row'>
             <div className = "large-6 large-centered small-6 small-centered columns">
@@ -143,14 +141,17 @@ var SubmitForm = React.createClass({
               <div className = "large-6 large-centered small-6 small-centered columns">
                 <h4>Cool Souvenirs:</h4>
                 <textarea rows={5} cols={40} type="text" placeholder="Cool Souvenirs" ref="souvenirs" />
-                <input className="small button" type="submit" value="Post" href="/"/>
               </div>
             </div>
+          <div className = 'row'>
+              <div className = "large-6 large-centered small-6 small-centered columns">
+                <h4>Upload Images:</h4>
+                <input type="file" onChange={this.handleChange}/>
+                <input className="small button" type="submit" value="Post" href="/"/>
+              </div>
+          </div>
         </div>
       </form>
-	  <form encType="multipart-formdata" onSubmit={this.handleSubmitSecond}>
-					<input type="file" onChange={this.handleChange}/>
-	  </form>
 	  </section>
     );
   }

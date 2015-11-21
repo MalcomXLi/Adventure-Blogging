@@ -24,8 +24,8 @@ var cookie_timeout = 20*60*1000; //time it takes for cookie to die
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
-//mongoose.connect('mongodb://localhost:27017/travel');
+//mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
+mongoose.connect('mongodb://localhost:27017/travel');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
@@ -117,7 +117,7 @@ app.post('/login', function(req, res){
                 sess.cookie.expires = new Date(Date.now()+timeout);
                 console.log(req.session.user);
                 res.status(201).json({'rememberme' : '1'});
-                console.log("success");
+                console.log("success in logging in");
             }else{
                 res.status(201).json('Login Failed');
                 console.log("failed");
@@ -128,7 +128,6 @@ app.post('/login', function(req, res){
 //signing up
 app.post('/signup', function(req, res){
     console.log(req.body);
-    console.log(db_name);
      // Set our internal DB variable
     var db = req.db;
     var userSchema = req.userSchema;

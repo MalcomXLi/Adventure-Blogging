@@ -99,7 +99,7 @@ app.get('/home', function(req, res) {
             });
     }
     else{
-        console.log("failed")
+        //console.log("failed")
         //res.render('login.html');
     }
 });

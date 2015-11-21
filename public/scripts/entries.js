@@ -33,6 +33,28 @@ var UserBox = React.createClass({
 
 
 var SubmitForm = React.createClass({
+  handleSubmitSecond: function(e){
+	e.preventDefault();
+  },
+  
+  handleChange: function(e){
+		var self = this;
+		var file = e.target.files[0];
+		
+		var reader = new FileReader();
+		reader.onload = function(upload){
+			console.log("The file has been read...");
+			self.setState({data_uri: upload.target.result});
+			console.log("DATA_URI", self.state.data_uri);
+		};
+		reader.readAsDataURL(file);
+	},
+	getInitialState: function(){
+		return {
+			data_uri: null,
+		};
+	},
+  
   handleSubmit: function(e) {
 	//this.refs.form.submit();
 
@@ -53,7 +75,7 @@ var SubmitForm = React.createClass({
       return;
     }
 	console.log("passed it");
-    this.props.onUserSubmit({TripName: name, Days: days, Destination: dest, Description: descrip, Itinerary: itin, Moments: moments, Complaints: complaints, Suggestions: suggestions, Souvenirs: souvenirs});
+    this.props.onUserSubmit({TripName: name, Days: days, Destination: dest, Description: descrip, Itinerary: itin, Moments: moments, Complaints: complaints, Suggestions: suggestions, Souvenirs: souvenirs, Image: this.state.data_uri});
     this.refs.TripName.value = '';
     this.refs.daysTravel.value = '';
   	this.refs.destination.value = '';
@@ -66,6 +88,7 @@ var SubmitForm = React.createClass({
   },
   render: function() {
     return (
+	<section>
       <form className="submitForm" onSubmit={this.handleSubmit} ref="form">
         <div className='row submitForm'>
           <div className = 'row'>
@@ -124,8 +147,11 @@ var SubmitForm = React.createClass({
               </div>
             </div>
         </div>
-
       </form>
+	  <form encType="multipart-formdata" onSubmit={this.handleSubmitSecond}>
+					<input type="file" onChange={this.handleChange}/>
+	  </form>
+	  </section>
     );
   }
 });

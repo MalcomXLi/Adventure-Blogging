@@ -24,8 +24,8 @@ var cookie_timeout = 20*60*1000; //time it takes for cookie to die
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
-mongoose.connect('mongodb://localhost:27017/travel');
+mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
+//mongoose.connect('mongodb://localhost:27017/travel');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
@@ -39,7 +39,7 @@ var entrySchema = new Schema({
 	Complaints: String, 
 	Suggestions: String, 
 	Souvenirs: String,
-    }, { collection: model_entries }
+    Image: String,}, { collection: model_entries }
 );
 
 var userSchema = new Schema({
@@ -79,7 +79,12 @@ app.use(function(req,res,next){
 //Serving files, such as images, CSS, JavaScript and other static files 
 app.use('/', express.static(__dirname+ '/public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
+//app.use(bodyParser.urlencoded({extended: true}));//or else you cant write
+
+//make the accepted request sizes bigger
+app.use(bodyParser.json({limit: '10mb'}));
+var urlencodedParser = bodyParser.urlencoded({limit: '10mb', extended:true});
+app.use(urlencodedParser);
 
 //Return data of peoples logins for now
 //Also check if people are logged in with cache if not hide shit 
@@ -172,6 +177,7 @@ app.post('/postentry', function(req, res){
 	var complaints = req.body.Complaints;
 	var suggestions = req.body.Suggestions;
 	var souvenirs = req.body.Souvenirs;
+	var image = req.body.Image;
     
     var newPost = new Entries({
         TripName: name,
@@ -182,7 +188,8 @@ app.post('/postentry', function(req, res){
 		Moments: moments, 
 		Complaints: complaints, 
 		Suggestions: suggestions, 
-		Souvenirs: souvenirs
+		Souvenirs: souvenirs,
+		Image: image
     });
     newPost.save(function(err) {
     //if (err) throw err;

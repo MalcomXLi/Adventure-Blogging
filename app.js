@@ -24,8 +24,8 @@ var cookie_timeout = 20*60*1000; //time it takes for cookie to die
 //MONGO SET UP START
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
-mongoose.connect('mongodb://localhost:27017/travel');
+mongoose.connect('mongodb://travelblog:blog@ds045454.mongolab.com:45454/travelblog');
+//mongoose.connect('mongodb://localhost:27017/travel');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 
@@ -94,7 +94,7 @@ app.get('/home', function(req, res) {
             });
     }
     else{
-        console.log("failed")
+        //console.log("failed")
         //res.render('login.html');
     }
 });

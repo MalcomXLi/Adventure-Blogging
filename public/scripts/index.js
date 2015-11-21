@@ -7,7 +7,6 @@ var UserBox = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        console.log(data);
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
@@ -36,12 +35,12 @@ var UserBox = React.createClass({
 var UserList = React.createClass({
   render: function() {
     var loginNodes = this.props.data.map(function(entryInfo, index) {
-      console.log(entryInfo);
+      console.log(entryInfo.TripName);
       return (
         //wrap with div because react can only return on thing at a time
         <div className="entries">
-           <User user={entryInfo.TripName} 
-            trip_name = {entryInfo.TripName}
+           <User trip_name = {entryInfo.TripName}
+            user={entryInfo.UserName}
             days= {entryInfo.Days}
             destination = {entryInfo.Destination}
             description= {entryInfo.Description}
@@ -72,6 +71,7 @@ var User = React.createClass({
   render: function() {
     return (
       <div className = "row entry">
+      <br/>
         <h2 className="TripName small-10 columns">
           {this.props.trip_name}
         </h2>
@@ -107,7 +107,9 @@ var User = React.createClass({
           <h4> Souvenirs </h4>
             {this.props.souvenirs}
         </div>
-
+        <div className="small-2 right columns">
+           <i> Posted By: </i>{this.props.user} 
+        </div>
       </div>
     );
   }
@@ -136,6 +138,6 @@ var User = React.createClass({
 });
 
 ReactDOM.render(
-  <UserBox url="/home" pollInterval={2000} />,
+  <UserBox url="/home" pollInterval={5000} />,
   document.getElementById('content')
 );

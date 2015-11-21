@@ -11,13 +11,15 @@ var UserBox = React.createClass({
       data: post,
       success: function(data) {
         this.setState({data: data});
+        //go back to home
+        window.location = '/';
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
+        alert("Must be logged in to post data!");
+        window.location = '/login';
       }.bind(this)
     });
-    //go back to home
-    window.location = '/';
   },
   getInitialState: function() {
     return {data: []};

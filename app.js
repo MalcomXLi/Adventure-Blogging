@@ -31,6 +31,7 @@ var Schema = mongoose.Schema;
 
 var entrySchema = new Schema({
 	TripName: String, 
+    UserName: String,
 	Days: String, 
 	Destination: String, 
 	Description: String, 
@@ -94,7 +95,7 @@ app.get('/home', function(req, res) {
         var db = req.db;
         res.setHeader('Cache-Control', 'no-cache');
         getEntries(collection_name_entry, {}, function (err, data) {
-               console.log(data);
+               console.log("success in grabbing data");
                res.json((data));
             });
     }
@@ -163,43 +164,52 @@ app.post('/signup', function(req, res){
 
 //post new entry
 app.post('/postentry', function(req, res){
-     // Set our internal DB variable
-    var db = req.db;
-    var entrySchema = req.entrySchema;
-    // Get our form values. These rely on the "name" attributes
-    var name = req.body.TripName;
-    var days = req.body.Days;
-	var dest = req.body.Destination;
-	var descrip = req.body.Description;
-	var itin = req.body.Itinerary;
-	var moments = req.body.Moments;
-	var complaints = req.body.Complaints;
-	var suggestions = req.body.Suggestions;
-	var souvenirs = req.body.Souvenirs;
-	var image = req.body.Image;
-    
-    var newPost = new Entries({
-        TripName: name,
-		Days: days, 
-		Destination: dest, 
-		Description: descrip, 
-		Itinerary: itin, 
-		Moments: moments, 
-		Complaints: complaints, 
-		Suggestions: suggestions, 
-		Souvenirs: souvenirs,
-		Image: image
-    });
-    newPost.save(function(err) {
-    //if (err) throw err;
-        if (err !== null) {
-            res.status(500).json({ error: "save failed", err: err});
-            return;
-        } else {
-            console.log("success in posting");
-            res.status(201).json(newPost);
-        };
-    });
+    //Can only post entry if logged in 
+    sess = req.session;
+    if(sess.user){
+         // Set our internal DB variable
+        var db = req.db;
+        var entrySchema = req.entrySchema;
+        // Get our form values. These rely on the "name" attributes
+        var name = req.body.TripName;
+        var user_name = sess.user;
+        var days = req.body.Days;
+    	var dest = req.body.Destination;
+    	var descrip = req.body.Description;
+    	var itin = req.body.Itinerary;
+    	var moments = req.body.Moments;
+    	var complaints = req.body.Complaints;
+    	var suggestions = req.body.Suggestions;
+    	var souvenirs = req.body.Souvenirs;
+    	var image = req.body.Image;
+        
+        var newPost = new Entries({
+            TripName: name,
+            UserName: user_name,
+    		Days: days, 
+    		Destination: dest, 
+    		Description: descrip, 
+    		Itinerary: itin, 
+    		Moments: moments, 
+    		Complaints: complaints, 
+    		Suggestions: suggestions, 
+    		Souvenirs: souvenirs,
+    		Image: image
+        });
+        newPost.save(function(err) {
+        //if (err) throw err;
+            if (err !== null) {
+                res.status(500).json({ error: "save failed", err: err});
+                return;
+            } else {
+                console.log("success in posting");
+                res.status(201).json(newPost);
+            };
+        });
+    }
+    else {
+        res.status(500).json({ error: "Not logged in", err: err});
+    }
 
 });
 

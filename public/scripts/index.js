@@ -49,6 +49,7 @@ var UserList = React.createClass({
             complaints = {entryInfo.Complaints}
             suggestions= {entryInfo.Suggestions}
             souvenirs= {entryInfo.Souvenirs}
+			img= {entryInfo.Image}
             key={index}>
             Days: {entryInfo.Days}
           </User>
@@ -106,6 +107,10 @@ var User = React.createClass({
         <div className="small-12 columns">
           <h4> Souvenirs </h4>
             {this.props.souvenirs}
+        </div>
+		<div className="small-12 columns">
+          <h4> Image </h4>
+			<img src={this.props.img}></img>
         </div>
         <div className="small-4 left columns">
         <br/>

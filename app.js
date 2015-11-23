@@ -95,7 +95,7 @@ app.get('/home', function(req, res) {
         var db = req.db;
         res.setHeader('Cache-Control', 'no-cache');
         getEntries(collection_name_entry, {}, function (err, data) {
-               console.log("success in grabbing data");
+              // console.log("success in grabbing data");
                res.json((data));
             });
     }
@@ -128,7 +128,6 @@ app.post('/login', function(req, res){
 
 //signing up
 app.post('/signup', function(req, res){
-    console.log(req.body);
      // Set our internal DB variable
     var db = req.db;
     var userSchema = req.userSchema;
@@ -165,7 +164,7 @@ app.post('/signup', function(req, res){
 //post new entry
 app.post('/postentry', function(req, res){
     //Can only post entry if logged in 
-    sess = req.session;
+    var sess = req.session;
     if(sess.user){
          // Set our internal DB variable
         var db = req.db;
@@ -214,8 +213,22 @@ app.post('/postentry', function(req, res){
 });
 
 //DELETE
-app.post('/api/delete', function(req, res){
-    console.log(req.body ['author']);
+app.post('/delete', function(req, res){
+    var entryData = req.body;
+    var query = {
+        TripName: entryData.TripName,
+        UserName: entryData.user
+    };
+    deleteEntries(collection_name_entry, query, function (err) {
+        if(!err){
+            console.log("success in deleting");
+            res.json("Success in deleting");
+        }
+        else {
+            console.log(err);
+            res.status(500).json({ error: "Delete did not work", err: err});
+        }
+    });
 });
 
 
@@ -235,6 +248,14 @@ function getLogins (collec, query, callback) {
 function getEntries (collec, query, callback){
     mongoose.connection.db.collection(collec, function (err, collection) {
         collection.find(query).toArray(callback);
+    });
+}
+
+//deletes entries
+function deleteEntries (collec, query, callback){
+    mongoose.connection.db.collection(collec, function (err, collection) {
+        collection.remove(query);
+        callback(err);
     });
 }
 

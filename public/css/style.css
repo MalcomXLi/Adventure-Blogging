@@ -29,7 +29,8 @@ body {
   padding-top: 20px;
 }
 
-.row.full {
-  max-width: 100%; 
+.deletePost{
+  background-color: black !important;
 }
+
 

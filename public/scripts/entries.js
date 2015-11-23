@@ -17,7 +17,7 @@ var UserBox = React.createClass({
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
         alert("Must be logged in to post data!");
-        window.location = '/login';
+        window.location = 'login.html';
       }.bind(this)
     });
   },

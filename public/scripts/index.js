@@ -107,37 +107,42 @@ var User = React.createClass({
           <h4> Souvenirs </h4>
             {this.props.souvenirs}
         </div>
+        <div className="small-4 left columns">
+        <br/>
+          <form onSubmit={this.onSubmit} className="MyForm">
+            <button type="submit" className="small button deletePost">Delete Post</button>
+          </form>
+        </div>
         <div className="small-2 right columns">
+        <br/>
            <i> Posted By: </i>{this.props.user} 
         </div>
       </div>
     );
+  },
+
+  onSubmit: function(event){
+    event.preventDefault();
+    var user = this.props.user;
+    var postName = this.props.trip_name;
+    var deleteData =({user: user, TripName: postName});
+    $.ajax({
+      url: '/delete',
+      dataType: 'json',
+      type: 'POST',
+      data: deleteData,
+      success: function(data) {
+        console.log(data);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   }
-
-
-  // onSubmit: function(event){
-  //   event.preventDefault();
-  //   var user = this.props.user;
-  //   var password = this.props.children;
-  //   var deleteData =({user: user, password: password});
-  //   $.ajax({
-  //     url: '/api/delete',
-  //     dataType: 'json',
-  //     type: 'POST',
-  //     data: deleteData,
-  //     success: function(data) {
-  //       console.log(data);
-  //       console.log("success!");
-  //     }.bind(this),
-  //     error: function(xhr, status, err) {
-  //       console.error(this.props.url, status, err.toString());
-  //     }.bind(this)
-  //   });
-  // },
 
 });
 
 ReactDOM.render(
-  <UserBox url="/home" pollInterval={5000} />,
+  <UserBox url="/home" pollInterval={3000} />,
   document.getElementById('content')
 );

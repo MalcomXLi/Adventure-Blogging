@@ -74,8 +74,8 @@ var SubmitForm = React.createClass({
 		console.log("in for some reason");
       return;
     }
-	console.log("passed it");
-    this.props.onUserSubmit({TripName: name, Days: days, Destination: dest, Description: descrip, Itinerary: itin, Moments: moments, Complaints: complaints, Suggestions: suggestions, Souvenirs: souvenirs, Image: this.state.data_uri});
+	var compressedString = escape(Base64String.compress(this.state.data_uri));
+    this.props.onUserSubmit({TripName: name, Days: days, Destination: dest, Description: descrip, Itinerary: itin, Moments: moments, Complaints: complaints, Suggestions: suggestions, Souvenirs: souvenirs, Image: compressedString});
     this.refs.TripName.value = '';
     this.refs.daysTravel.value = '';
   	this.refs.destination.value = '';

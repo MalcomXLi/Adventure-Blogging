@@ -36,6 +36,11 @@ var UserList = React.createClass({
   render: function() {
     var loginNodes = this.props.data.map(function(entryInfo, index) {
       console.log(entryInfo.TripName);
+	  var header = "data:image/jpeg;base64,";
+	  var decompressed = Base64String.decompress(unescape(entryInfo.Image));
+	  if(decompressed.indexOf("jpeg") > -1){
+		  var uncompressed = header.concat(decompressed.substring(20));
+	  }	  
       return (
         //wrap with div because react can only return on thing at a time
         <div className="entries">
@@ -49,7 +54,7 @@ var UserList = React.createClass({
             complaints = {entryInfo.Complaints}
             suggestions= {entryInfo.Suggestions}
             souvenirs= {entryInfo.Souvenirs}
-			img= {entryInfo.Image}
+			img= {uncompressed}
             key={index}>
             Days: {entryInfo.Days}
           </User>

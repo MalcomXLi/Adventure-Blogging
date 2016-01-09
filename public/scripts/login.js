@@ -55,7 +55,7 @@ var SubmitForm = React.createClass({
           <div className = "row">
             <div className="large-6 large-centered small-6 columns ">
               <h4>Password:</h4>
-              <input type="text" placeholder="Password" ref="Password" />
+              <input type="password" placeholder="Password" ref="Password" />
               <input type="submit" value="Login"/>
             </div>
           </div>

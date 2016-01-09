@@ -1,3 +1,5 @@
+var tags = [];
+
 
 var UserBox = React.createClass({
 
@@ -33,7 +35,6 @@ var UserBox = React.createClass({
   }
 });
 
-
 var SubmitForm = React.createClass({
   
   handleChange: function(e){
@@ -49,6 +50,7 @@ var SubmitForm = React.createClass({
 		};
 		reader.readAsDataURL(file);
 	},
+
 	getInitialState: function(){
 		return {
 			data_uri: null,
@@ -56,19 +58,38 @@ var SubmitForm = React.createClass({
 	},
   
   handleSubmit: function(e) {
-	//this.refs.form.submit();
+  	//this.refs.form.submit();
 
-  e.preventDefault();
-  var name = this.refs.TripName.value.trim();
-  var days = this.refs.daysTravel.value.trim();
-	var dest = this.refs.destination.value.trim();
-	var descrip = this.refs.description.value.trim();
-	var itin = this.refs.itinerary.value.trim();
-	var moments = this.refs.favMoments.value.trim();
-	var complaints = this.refs.complaints.value.trim();
-	var suggestions = this.refs.suggestions.value.trim();
-	var souvenirs = this.refs.souvenirs.value.trim();
-	console.log("got here for some reason")
+    e.preventDefault();
+    var name = this.refs.TripName.value.trim();
+    var days = this.refs.daysTravel.value.trim();
+  	var dest = this.refs.destination.value.trim();
+  	var descrip = this.refs.description.value.trim();
+  	var itin = this.refs.itinerary.value.trim();
+  	var moments = this.refs.favMoments.value.trim();
+  	var complaints = this.refs.complaints.value.trim();
+  	var suggestions = this.refs.suggestions.value.trim();
+  	var souvenirs = this.refs.souvenirs.value.trim();
+  	console.log("got here for some reason")
+
+      if (!name || !days || !dest || !descrip) {
+  		console.log("in for some reason");
+        return;
+      }
+  	console.log("passed it");
+    this.props.onUserSubmit({
+      TripName: name, 
+      Days: days, 
+      Destination: dest, 
+      Description: descrip, 
+      Itinerary: itin, 
+      Moments: moments, 
+      Complaints: complaints, 
+      Suggestions: suggestions, 
+      Souvenirs: souvenirs,
+      Tags: tags,
+      Image: this.state.data_uri
+    });
 
     if (!name || !days || !dest || !descrip) {
 		console.log("in for some reason");
@@ -76,6 +97,7 @@ var SubmitForm = React.createClass({
     }
 	var compressedString = escape(Base64String.compress(this.state.data_uri));
     this.props.onUserSubmit({TripName: name, Days: days, Destination: dest, Description: descrip, Itinerary: itin, Moments: moments, Complaints: complaints, Suggestions: suggestions, Souvenirs: souvenirs, Image: compressedString});
+
     this.refs.TripName.value = '';
     this.refs.daysTravel.value = '';
   	this.refs.destination.value = '';
@@ -86,6 +108,15 @@ var SubmitForm = React.createClass({
   	this.refs.suggestions.value = '';
   	this.refs.souvenirs.value = '';
   },
+
+  handleTags: function(e){
+    e.preventDefault();
+    tags.push(this.refs.tags.value.trim());
+    this.refs.tags.value = '';
+    this.refs.added_tags.value = tags.toString();
+    //alert(tags);
+  },
+
   render: function() {
     return (
 	<section>
@@ -140,17 +171,25 @@ var SubmitForm = React.createClass({
       		  </div>
           </div>
           <div className = 'row'>
-              <div className = "large-6 large-centered small-6 small-centered columns">
-                <h4>Cool Souvenirs:</h4>
-                <textarea rows={5} cols={40} type="text" placeholder="Cool Souvenirs" ref="souvenirs" />
-              </div>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+              <h4>Cool Souvenirs:</h4>
+              <textarea rows={5} cols={40} type="text" placeholder="Cool Souvenirs" ref="souvenirs" />
             </div>
+          </div>
           <div className = 'row'>
-              <div className = "large-6 large-centered small-6 small-centered columns">
-                <h4>Upload Images:</h4>
-                <input type="file" onChange={this.handleChange}/>
-                <input className="small button" type="submit" value="Post" href="/"/>
-              </div>
+            <div className = "small-6 small-centered columns">
+                <h4>Tags:</h4>
+                <textarea type="text" placeholder="Tags" ref="tags" />
+                <button className="small button" onClick ={this.handleTags} > Add Tag</button>
+                <textarea type="text" placeholder="Added Tags" ref="added_tags" />
+            </div>
+          </div>
+          <div className = 'row'>
+            <div className = "large-6 large-centered small-6 small-centered columns">
+              <h4>Upload Images:</h4>
+              <input type="file" onChange={this.handleChange}/>
+              <input className="small button" type="submit" value="Post" href="/"/>
+            </div>
           </div>
         </div>
       </form>

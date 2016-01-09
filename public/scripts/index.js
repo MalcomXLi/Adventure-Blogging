@@ -118,14 +118,14 @@ var User = React.createClass({
 			<img src={this.props.img}></img>
         </div>
         <div className="small-4 left columns">
-        <br/>
+          <br/>
           <form onSubmit={this.onSubmit} className="MyForm">
             <button type="submit" className="small button deletePost">Delete Post</button>
           </form>
         </div>
         <div className="small-2 right columns">
-        <br/>
-           <i> Posted By: </i>{this.props.user} 
+          <br/>
+          <i> Posted By: </i>{this.props.user} 
         </div>
       </div>
     );

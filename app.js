@@ -40,6 +40,7 @@ var entrySchema = new Schema({
 	Complaints: String, 
 	Suggestions: String, 
 	Souvenirs: String,
+    Tags: [String],
     Image: String,}, { collection: model_entries }
 );
 
@@ -181,6 +182,7 @@ app.post('/postentry', function(req, res){
     	var suggestions = req.body.Suggestions;
     	var souvenirs = req.body.Souvenirs;
     	var image = req.body.Image;
+        var tags = req.body.Tags;
         
         var newPost = new Entries({
             TripName: name,
@@ -193,6 +195,7 @@ app.post('/postentry', function(req, res){
     		Complaints: complaints, 
     		Suggestions: suggestions, 
     		Souvenirs: souvenirs,
+            Tags: tags,
     		Image: image
         });
         newPost.save(function(err) {
@@ -207,7 +210,7 @@ app.post('/postentry', function(req, res){
         });
     }
     else {
-        res.status(500).json({ error: "Not logged in", err: err});
+        res.status(500).json({ error: "Not logged in"});
     }
 
 });

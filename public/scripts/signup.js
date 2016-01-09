@@ -81,7 +81,7 @@ var SubmitForm = React.createClass({
         </div>
         <div className='row'>
           <div className = "large-6 large-centered small-6 columns">
-            <h4>First Name:</h4>
+            <h4>Frsit Name:</h4>
             <input type="text" placeholder="First Name" ref="fname" />
           </div>
         </div>
